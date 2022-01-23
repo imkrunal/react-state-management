@@ -3,16 +3,16 @@ import { Link, useParams } from "react-router-dom";
 import PokemonCard from "../components/PokemonCard";
 import PokemonMoves from "../components/PokemonMoves";
 import pokemons from "../pokemons.json";
+import { getPokemon } from "../services/pokemon";
 
 const PokemonInfo = () => {
   const { id } = useParams<{ id: string }>();
   const [pokemon, setPokemon] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const pokemon = pokemons.find(function (pokemon) {
-      return pokemon.id === Number(id);
-    });
-    pokemon ? setPokemon(pokemon) : setPokemon(null);
+    id && getPokemon(id, setLoading, setPokemon, setError);
   }, [id]);
 
   return (
@@ -20,16 +20,19 @@ const PokemonInfo = () => {
       <Link to="/" className="px-8 pt-8 block">
         Go Back
       </Link>
-      {pokemon !== null ? (
-        <>
-          <PokemonCard pokemon={pokemon} />
-          <div className="px-8 mt-8">
-            <div className="text-xl font-medium">Moves List</div>
-            <PokemonMoves pokemon={pokemon} />
-          </div>
-        </>
+      {error !== null && <div className="text-red-500 px-8 py-8">{error}</div>}
+      {loading ? (
+        <div>Loading</div>
       ) : (
-        "Not Found"
+        pokemon !== null && (
+          <>
+            <PokemonCard pokemon={pokemon} />
+            <div className="px-8 mt-8">
+              <div className="text-xl font-medium">Moves List</div>
+              <PokemonMoves pokemon={pokemon} />
+            </div>
+          </>
+        )
       )}
     </div>
   );

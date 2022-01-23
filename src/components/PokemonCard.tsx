@@ -2,7 +2,7 @@ import { formatName } from "../utils";
 import * as Progress from "@radix-ui/react-progress";
 import { Link } from "react-router-dom";
 
-type Pokemon = {
+export type Pokemon = {
   id: number;
   name: string;
   sprites: {
@@ -13,7 +13,7 @@ type Pokemon = {
   stats: Array<{ stat: { name: string }; base_stat: number }>;
 };
 
-type PokemonCardProps = {
+export type PokemonCardProps = {
   pokemon: Pokemon;
 };
 
@@ -24,7 +24,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
       className="p-8 border-b dark:border-gray-800 relative"
     >
       <Link
-        to={`/pokemon/${pokemon.id}`}
+        to={`/pokemon/${pokemon.name}`}
         className="absolute top-0 left-0 right-0 bottom-0 z-50"
       />
       <div className="md:grid grid-cols-3 gap-4">
