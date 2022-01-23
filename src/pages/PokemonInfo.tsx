@@ -1,19 +1,11 @@
-import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import PokemonCard from "../components/PokemonCard";
 import PokemonMoves from "../components/PokemonMoves";
-import pokemons from "../pokemons.json";
-import { getPokemon } from "../services/pokemon";
+import { useGetPokemonQuery } from "../redux/pokemon";
 
 const PokemonInfo = () => {
-  const { id } = useParams<{ id: string }>();
-  const [pokemon, setPokemon] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    id && getPokemon(id, setLoading, setPokemon, setError);
-  }, [id]);
+  const { id } = useParams();
+  const { data, error, isLoading } = useGetPokemonQuery(id);
 
   return (
     <div>
@@ -21,15 +13,16 @@ const PokemonInfo = () => {
         Go Back
       </Link>
       {error !== null && <div className="text-red-500 px-8 py-8">{error}</div>}
-      {loading ? (
+      {isLoading ? (
         <div>Loading</div>
       ) : (
-        pokemon !== null && (
+        data &&
+        data !== null && (
           <>
-            <PokemonCard pokemon={pokemon} />
+            <PokemonCard pokemon={data} />
             <div className="px-8 mt-8">
               <div className="text-xl font-medium">Moves List</div>
-              <PokemonMoves pokemon={pokemon} />
+              <PokemonMoves pokemon={data} />
             </div>
           </>
         )

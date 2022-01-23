@@ -19,10 +19,7 @@ export type PokemonCardProps = {
 
 const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   return (
-    <div
-      key={pokemon.id}
-      className="p-8 border-b dark:border-gray-800 relative"
-    >
+    <div className="p-8 border-b dark:border-gray-800 relative">
       <Link
         to={`/pokemon/${pokemon.name}`}
         className="absolute top-0 left-0 right-0 bottom-0 z-50"
@@ -33,10 +30,10 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
             #{pokemon.id}
           </div>
           <div className="flex flex-col items-center relative">
-            <img src={pokemon.sprites.front_default} />
+            <img src={pokemon.sprites?.front_default} />
             <div className="text-2xl">{formatName(pokemon.name)}</div>
             <div className="flex items-center space-x-2 my-2">
-              {pokemon.types.map((type, typeIndex) => (
+              {pokemon.types?.map((type, typeIndex) => (
                 <div
                   className="dark:bg-gray-700 px-2 py-1 rounded-md text-sm"
                   key={typeIndex}
@@ -46,7 +43,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
               ))}
             </div>
             <div className="flex items-center space-x-4">
-              {pokemon.abilities.map((ability, abilityIndex) => (
+              {pokemon.abilities?.map((ability, abilityIndex) => (
                 <div className="py-1 text-sm" key={abilityIndex}>
                   {formatName(ability.ability.name)}
                 </div>
@@ -55,7 +52,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
           </div>
         </div>
         <div>
-          {pokemon.stats.map((stat, statIndex) => (
+          {pokemon.stats?.map((stat, statIndex) => (
             <div
               key={statIndex}
               className="md:flex flex-wrap items-center md:space-x-4 py-2 md:px-8"

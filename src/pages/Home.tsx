@@ -1,26 +1,19 @@
-import { useEffect, useState } from "react";
-import PokemonCard, { Pokemon } from "../components/PokemonCard";
-import { getAllPokemons } from "../services/pokemon";
+import PokemonCard from "../components/PokemonCard";
+import { useGetAllPokemonQuery } from "../redux/pokemon";
 
 const Home = () => {
-  const [loading, setLoading] = useState(false);
-  const [pokemons, setPokemons] = useState<Array<Pokemon> | null>(null);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    getAllPokemons(setLoading, setPokemons, setError);
-  }, []);
+  const { data, isLoading, error }: any = useGetAllPokemonQuery();
 
   return (
     <div>
       {error !== null && <div className="text-red-500">{error}</div>}
-      {loading ? (
+      {isLoading ? (
         <div>Loading...</div>
       ) : (
-        error === null &&
-        pokemons !== null &&
-        pokemons.map((pokemon) => (
-          <PokemonCard key={pokemon.id} pokemon={pokemon} />
+        data &&
+        data !== null &&
+        data.results.map((pokemon: any, pokemonIndex: number) => (
+          <PokemonCard key={pokemonIndex} pokemon={pokemon} />
         ))
       )}
     </div>
