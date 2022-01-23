@@ -1,19 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import PokemonCard from "../components/PokemonCard";
 import PokemonMoves from "../components/PokemonMoves";
-import pokemons from "../pokemons.json";
-import { getPokemon } from "../services/pokemon";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { getPokemon } from "../redux/pokemonSlice";
 
 const PokemonInfo = () => {
   const { id } = useParams<{ id: string }>();
-  const [pokemon, setPokemon] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const dispatch = useAppDispatch();
+  const { loading, pokemon, error }: any = useAppSelector((state) => ({
+    loading: state.pokemon.getPokemon.loading,
+    pokemon: state.pokemon.getPokemon.pokemon,
+    error: state.pokemon.getPokemon.error,
+  }));
 
   useEffect(() => {
-    id && getPokemon(id, setLoading, setPokemon, setError);
-  }, [id]);
+    id && dispatch(getPokemon(id));
+  }, [dispatch, id]);
 
   return (
     <div>

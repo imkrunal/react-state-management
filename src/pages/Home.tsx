@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import PokemonCard, { Pokemon } from "../components/PokemonCard";
-import { getAllPokemons } from "../services/pokemon";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { getAllPokemons } from "../redux/pokemonSlice";
 
 const Home = () => {
-  const [loading, setLoading] = useState(false);
-  const [pokemons, setPokemons] = useState<Array<Pokemon> | null>(null);
-  const [error, setError] = useState(null);
+  const dispatch = useAppDispatch();
+  const { loading, pokemons, error }: any = useAppSelector((state) => ({
+    loading: state.pokemon.allPokemons.loading,
+    pokemons: state.pokemon.allPokemons.pokemons,
+    error: state.pokemon.allPokemons.error,
+  }));
 
   useEffect(() => {
-    getAllPokemons(setLoading, setPokemons, setError);
-  }, []);
+    dispatch(getAllPokemons());
+  }, [dispatch]);
 
   return (
     <div>
@@ -19,7 +23,7 @@ const Home = () => {
       ) : (
         error === null &&
         pokemons !== null &&
-        pokemons.map((pokemon) => (
+        pokemons.map((pokemon: any) => (
           <PokemonCard key={pokemon.id} pokemon={pokemon} />
         ))
       )}
