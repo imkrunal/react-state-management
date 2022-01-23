@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import PokemonCard from "../components/PokemonCard";
 import PokemonMoves from "../components/PokemonMoves";
-import pokemons from "../pokemons.json";
-import { getPokemon } from "../services/pokemon";
+import { getPokemon } from "../redux/actions";
 
 const PokemonInfo = () => {
+  const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
-  const [pokemon, setPokemon] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { loading, pokemon, error } = useSelector((state: any) => ({
+    loading: state.pokemon.getPokemon.loading,
+    pokemon: state.pokemon.getPokemon.pokemon,
+    error: state.pokemon.getPokemon.error,
+  }));
 
   useEffect(() => {
-    id && getPokemon(id, setLoading, setPokemon, setError);
-  }, [id]);
+    id && dispatch(getPokemon(id));
+  }, [dispatch, id]);
 
   return (
     <div>
@@ -29,7 +32,7 @@ const PokemonInfo = () => {
             <PokemonCard pokemon={pokemon} />
             <div className="px-8 mt-8">
               <div className="text-xl font-medium">Moves List</div>
-              <PokemonMoves pokemon={pokemon} />
+              <PokemonMoves />
             </div>
           </>
         )
